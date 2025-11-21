@@ -65,7 +65,55 @@ On some READMEs, you may see small images that convey metadata, such as whether 
 Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
 
 ## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+### Contract Compilation & ABI Generation
+
+This project uses a Go tool to compile smart contracts and generate Go bindings.
+
+#### 🛠 Compile Contracts
+
+Run the following commands:
+
+```bash
+cd go-contracts
+go run cmd/main.go compile
+cp ../contracts/mimc/mimc.json ../contracts/bin
+go run cmd/main.go abigen
+```
+
+#### 🚀 Deploying Contracts
+
+To deploy the contracts, you only need to set **three environment variables** in the `deployer/.env` file:
+
+```bash
+GETH_NODE_URL=         # RPC URL of the Ethereum node, must be a valid URL (following standard URL formatting rules)
+GETH_NODE_KEYSTORE=    # Path to the keystore directory, must exists
+GETH_NODE_PASSWORD=    # Password for the keystore
+```
+and run the following commands:
+
+```bash
+cd deployer
+go run cmd/deploy/deploy.go
+```
+
+#### 🔎 Running the ZKP Test
+
+To run the Zero-Knowledge Proof test:
+
+```bash
+go run cmd/pinacle/pinacle.go
+```
+
+#### ⚠️ Important Notice About ZKP Files
+
+Due to the large size of .zkey proving keys and verification keys, they are not included in the repository.
+You must download them separately and update only these **three environment variables** in the `deployer/.env` file:
+
+```bash
+ZK_WASM_FILENAME=                # Path to the circuit .wasm file
+ZK_ZKEY_FILENAME=                # Path to the proving key .zkey file
+ZK_VERIFICATION_KEY_FILENAME=    # Path to the verification key JSON file
+```
 
 ## Usage
 Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
