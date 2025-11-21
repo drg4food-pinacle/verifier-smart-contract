@@ -1,0 +1,25 @@
+# Build Directory
+zero-knowledge-proofs/zkPinacle/circuits/build
+
+# PowersOfTau
+zero-knowledge-proofs/zkPinacle/powersOfTau
+
+# Addresses
+addresses.json
+
+# Bin Directory
+contracts/bin/
+
+# Private Keys
+privateKeys.json
+
+# Ignore addresses.json
+deployer/addresses/*
+deployer/accounts/*
+
+# Abigen and Solc
+go-contracts/.abigen
+go-contracts/.solc
+
+# Build folders
+build/
