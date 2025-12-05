@@ -24,14 +24,15 @@ Sapienza University of Rome
 The verifier smart contract developed within the PINACLE project enable the validation of Zero Knowledge Proofs (ZKPs) on-chain, ensuring privacy-preserving and secure access control to sensitive functionalities of the platform. These contracts allow decentralized verification of identity proofs without disclosing any personal data, thus supporting GDPR compliance and strengthening trust between food recipients, intermediaries, and food banks. By contributing this tool, PINACLE adds a reusable and scalable building block to the DRG4Food Toolbox for projects requiring privacy-preserving role-based access control.
 
 
-## Installation
-### Contract Compilation & ABI Generation
+## Getting Started
 
 This project uses a Go tool to compile smart contracts and generate Go bindings.
 
-#### 🛠 Compile Contracts
+### 🛠 1. Compile Contracts [Optional]
 
-Run the following commands:
+This is an optional step. You can go directly to run the ZKP test.
+
+If you make any changes and wish to compile the contracts run the following commands:
 
 ```bash
 cd go-contracts
@@ -40,7 +41,7 @@ cp ../contracts/mimc/mimc.json ../contracts/bin
 go run cmd/main.go abigen
 ```
 
-#### 🚀 Deploying Contracts
+### 🚀 2. Deploy Contracts
 
 To deploy the contracts, you only need to set **three environment variables** in the `deployer/.env` file:
 
@@ -56,25 +57,19 @@ cd deployer
 go run cmd/deploy/deploy.go
 ```
 
-#### 🔎 Running the ZKP Test
+### 3. ZKP artifacts
 
-To run the Zero-Knowledge Proof test:
-
-```bash
-go run cmd/pinacle/pinacle.go
-```
-
-#### ⚠️ Important Notice About ZKP Files
+#### ⚠️ Important Notice About ZKP artifacts
 
 Due to the large size of .zkey proving keys and verification keys, they are not included in the repository.
-You must download them separately and update only these **three environment variables** in the `deployer/.env` file:
+Either you download them from here and update only these **three environment variables** in the `deployer/.env` file:
 
 ```bash
 ZK_WASM_FILENAME=                # Path to the circuit .wasm file
 ZK_ZKEY_FILENAME=                # Path to the proving key .zkey file
 ZK_VERIFICATION_KEY_FILENAME=    # Path to the verification key JSON file
 ```
-If you **already have precompiled ZKP files**, simply place them on disk and set these environment variables to their paths — no further steps are required. Otherwise you have to generate them yourself by running:
+Or you have to generate them yourself by running:
 
 ```bash
 cd zero-knowledge-proofs/zkPinacle
@@ -83,7 +78,20 @@ snarkjs zkey export solidityverifier circuits/build/Pinacle/keys/Pinacle_final.z
 sed -i 's/\bGroth16Verifier\b/Verifier/' Verifier/Verifier.sol # Modify Contract Name
 cp Verifier.sol ../../../contracts/Verifier/Verifier.sol
 ```
-After this, continue with **Step 1 (Compile Contracts)** in the main instructions.
+After this, you need to go back to **Step 1** to compile again the contracts, before you continue with running the test.
+
+
+## Usage
+
+### 🔎 Running the ZKP Test
+
+To run the Zero-Knowledge Proof test:
+
+```bash
+go run cmd/pinacle/pinacle.go
+```
+
+
 
 ## Licensing
 
