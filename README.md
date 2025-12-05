@@ -74,7 +74,16 @@ ZK_WASM_FILENAME=                # Path to the circuit .wasm file
 ZK_ZKEY_FILENAME=                # Path to the proving key .zkey file
 ZK_VERIFICATION_KEY_FILENAME=    # Path to the verification key JSON file
 ```
+If you **already have precompiled ZKP files**, simply place them on disk and set these environment variables to their paths — no further steps are required. Otherwise you have to generate them yourself by running:
 
+```bash
+cd zero-knowledge-proofs/zkPinacle
+./setup.sh --circom circuits/Pinacle.circom --power 14 # Trusted Setup
+snarkjs zkey export solidityverifier circuits/build/Pinacle/keys/Pinacle_final.zkey Verifier/Verifier.sol # Export Solidity Verifier
+sed -i 's/\bGroth16Verifier\b/Verifier/' Verifier/Verifier.sol # Modify Contract Name
+cp Verifier.sol ../../../contracts/Verifier/Verifier.sol
+```
+After this, continue with **Step 1 (Compile Contracts)** in the main instructions.
 
 ## Licensing
 
