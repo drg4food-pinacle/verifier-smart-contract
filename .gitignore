@@ -3,9 +3,7 @@ zero-knowledge-proofs/zkPinacle/circuits/build
 
 # PowersOfTau
 zero-knowledge-proofs/zkPinacle/powersOfTau
-
-# Addresses
-addresses.json
+zero-knowledge-proofs/zkPinacle/Verifier
 
 # Bin Directory
 contracts/bin/
