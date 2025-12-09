@@ -26,13 +26,32 @@ The verifier smart contract developed within the PINACLE project enable the vali
 
 ## Getting Started
 
+### 1. ZKP artifacts
+
+To generate the ZKP artifacts (.wasm, .zkey and verification key) and export the verifier smart contract, you have to run the following:
+
+```bash
+cd zero-knowledge-proofs/zkPinacle
+./setup.sh --circom circuits/Pinacle.circom --power 14 # Trusted Setup
+snarkjs zkey export solidityverifier circuits/build/Pinacle/keys/Pinacle_final.zkey Verifier/Verifier.sol # Export Solidity Verifier
+sed -i 's/\bGroth16Verifier\b/Verifier/' Verifier/Verifier.sol # Modify Contract Name
+cp Verifier.sol ../../../contracts/Verifier/Verifier.sol
+```
+
+and update these three environment variables in the deployer/.env file:
+
+```bash
+ZK_WASM_FILENAME=                # Path to the circuit .wasm file
+ZK_ZKEY_FILENAME=                # Path to the proving key .zkey file
+ZK_VERIFICATION_KEY_FILENAME=    # Path to the verification key JSON file
+```
+
+
+### 🛠 2. Compile Contracts
+
 This project uses a Go tool to compile smart contracts and generate Go bindings.
 
-### 🛠 1. Compile Contracts [Optional]
-
-This is an optional step. You can go directly to run the ZKP test.
-
-If you make any changes and wish to compile the contracts run the following commands:
+You need to run the following commands to compile the contracts (currently compatible only with Linux, no macOS):
 
 ```bash
 cd go-contracts
@@ -41,7 +60,7 @@ cp ../contracts/mimc/mimc.json ../contracts/bin
 go run cmd/main.go abigen
 ```
 
-### 🚀 2. Deploy Contracts
+### 🚀 3. Deploy Contracts
 
 To deploy the contracts, you only need to set **three environment variables** in the `deployer/.env` file:
 
@@ -57,30 +76,6 @@ cd deployer
 go run cmd/deploy/deploy.go
 ```
 
-### 3. ZKP artifacts
-
-#### ⚠️ Important Notice About ZKP artifacts
-
-Due to the large size of .zkey proving keys and verification keys, they are not included in the repository.
-Either you download them from here and update only these **three environment variables** in the `deployer/.env` file:
-
-```bash
-ZK_WASM_FILENAME=                # Path to the circuit .wasm file
-ZK_ZKEY_FILENAME=                # Path to the proving key .zkey file
-ZK_VERIFICATION_KEY_FILENAME=    # Path to the verification key JSON file
-```
-Or you have to generate them yourself by running:
-
-```bash
-cd zero-knowledge-proofs/zkPinacle
-./setup.sh --circom circuits/Pinacle.circom --power 14 # Trusted Setup
-snarkjs zkey export solidityverifier circuits/build/Pinacle/keys/Pinacle_final.zkey Verifier/Verifier.sol # Export Solidity Verifier
-sed -i 's/\bGroth16Verifier\b/Verifier/' Verifier/Verifier.sol # Modify Contract Name
-cp Verifier.sol ../../../contracts/Verifier/Verifier.sol
-```
-After this, you need to go back to **Step 1** to compile again the contracts, before you continue with running the test.
-
-
 ## Usage
 
 ### 🔎 Running the ZKP Test
@@ -90,7 +85,6 @@ To run the Zero-Knowledge Proof test:
 ```bash
 go run cmd/pinacle/pinacle.go
 ```
-
 
 
 ## Licensing
